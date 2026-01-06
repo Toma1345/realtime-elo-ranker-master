@@ -1,4 +1,7 @@
 {
+  "dependencies": {
+    "@nestjs/mapped-types": "*"
+  },
   "name": "realtime-elo-ranker",
   "version": "1.0.1",
   "description": "",
@@ -10,9 +13,11 @@
     "apps:api-mock:start": "pnpm run --filter ./apps/realtime-elo-ranker-api-mock start",
     "libs:ui:build": "pnpm run --filter ./libs/ui build",
     "libs:ui:test": "pnpm run --filter ./libs/ui test",
-    "docs:swagger:start": "pnpm run --filter ./docs/swagger start"
+    "docs:swagger:start": "pnpm run --filter ./docs/swagger start",
+    "apps:server:dev": "pnpm run --filter ./apps/realtime-elo-ranker-server start:dev"
   },
   "devDependencies": {
+    "@nestjs/cli": "^11.0.14",
     "generate-react-cli": "catalog:",
     "motion": "catalog:",
     "next": "catalog:",
