@@ -1,4 +1,4 @@
 export declare class CreateMatchDto {
-    winnerId: string;
-    loserId: string;
+    winnerId: number;
+    loserId: number;
 }

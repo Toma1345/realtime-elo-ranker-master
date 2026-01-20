@@ -9,21 +9,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RankingGateway = void 0;
-const websockets_1 = require("@nestjs/websockets");
-let RankingGateway = class RankingGateway {
-    handleMessage(client, payload) {
-        return 'Hello world!';
+exports.RankingService = void 0;
+const common_1 = require("@nestjs/common");
+const player_service_1 = require("../player/player.service");
+let RankingService = class RankingService {
+    playerService;
+    ranking = [];
+    constructor(playerService) {
+        this.playerService = playerService;
+    }
+    async onModuleInit() {
+        await this.refreshRanking();
+    }
+    async refreshRanking() {
+        this.ranking = await this.playerService.findAll();
+        this.ranking.sort((a, b) => b.elo - a.elo);
+    }
+    getRanking() {
+        return this.ranking;
     }
 };
-exports.RankingGateway = RankingGateway;
-__decorate([
-    (0, websockets_1.SubscribeMessage)('message'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", String)
-], RankingGateway.prototype, "handleMessage", null);
-exports.RankingGateway = RankingGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)()
-], RankingGateway);
-//# sourceMappingURL=ranking.gateway.js.map
+exports.RankingService = RankingService;
+exports.RankingService = RankingService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [player_service_1.PlayerService])
+], RankingService);
+//# sourceMappingURL=ranking.service.js.map

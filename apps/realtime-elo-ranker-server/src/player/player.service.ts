@@ -1,34 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Player } from './entities/player.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
 
 @Injectable()
 export class PlayerService {
-  private players: Player[] = [];
+  constructor(
+    @InjectRepository(Player)
+    private playerRepository: Repository<Player>,
+  ) {}
 
-  create(createPlayerDto: CreatePlayerDto): Player {
-    const newPlayer: Player = {
-      id: this.players.length + 1,
-      name: createPlayerDto.name,
-      elo: createPlayerDto.elo ?? 1000,
-    };
-    this.players.push(newPlayer);
-    return newPlayer;
+  create(createPlayerDto: CreatePlayerDto) {
+    const player = this.playerRepository.create(createPlayerDto);
+    return this.playerRepository.save(player);
   }
 
-  findAll(): Player[] {
-    return this.players;
+  findAll() {
+    return this.playerRepository.find({ order: { elo: 'DESC' } });
   }
 
   findOne(id: number) {
-    return this.players.find((p) => p.id === id);
+    return this.playerRepository.findOneBy({ id });
   }
 
-  updateElo(id: number, newElo: number) {
-    const player = this.findOne(id);
-    if (player) {
-      player.elo = newElo;
-    }
-    return player;
+  async updateElo(id: number, newElo: number) {
+    await this.playerRepository.update(id, { elo: newElo });
+    return this.findOne(id);
   }
 }

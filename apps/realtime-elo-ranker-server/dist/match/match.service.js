@@ -8,56 +8,75 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MatchService = void 0;
 const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+const event_emitter_1 = require("@nestjs/event-emitter");
 const player_service_1 = require("../player/player.service");
+const match_entity_1 = require("./entities/match.entity");
+const ranking_service_1 = require("../ranking/ranking.service");
 let MatchService = class MatchService {
+    matchRepository;
     playerService;
-    constructor(playerService) {
+    rankingService;
+    eventEmitter;
+    constructor(matchRepository, playerService, rankingService, eventEmitter) {
+        this.matchRepository = matchRepository;
         this.playerService = playerService;
+        this.rankingService = rankingService;
+        this.eventEmitter = eventEmitter;
     }
-    create(createMatchDto) {
-        const winner = this.playerService.findOne(+createMatchDto.winnerId);
-        const loser = this.playerService.findOne(+createMatchDto.loserId);
+    async create(createMatchDto) {
+        const { winnerId, loserId } = createMatchDto;
+        const winner = await this.playerService.findOne(winnerId);
+        const loser = await this.playerService.findOne(loserId);
         if (!winner || !loser) {
-            throw new Error('Player not found');
+            throw new common_1.NotFoundException('Joueur introuvable');
         }
-        const winnerElo = winner.elo;
-        const loserElo = loser.elo;
-        const kFactor = 32;
-        const expectedWinnerScore = 1 / (1 + Math.pow(10, (loserElo - winnerElo) / 400));
-        const expectedLoserScore = 1 / (1 + Math.pow(10, (winnerElo - loserElo) / 400));
-        const newWinnerElo = winnerElo + kFactor * (1 - expectedWinnerScore);
-        const newLoserElo = loserElo + kFactor * (0 - expectedLoserScore);
-        this.playerService.updateElo(+createMatchDto.winnerId, newWinnerElo);
-        this.playerService.updateElo(+createMatchDto.loserId, newLoserElo);
-        return {
-            message: 'Match validé',
-            details: {
-                winner: {
-                    id: winner.id,
-                    oldElo: winner.elo,
-                    newElo: newWinnerElo,
-                },
-                loser: {
-                    id: loser.id,
-                    oldElo: loser.elo,
-                    newElo: newLoserElo,
-                },
-            },
-        };
+        const K = 32;
+        const expectedWinner = 1 / (1 + Math.pow(10, (loser.elo - winner.elo) / 400));
+        const expectedLoser = 1 / (1 + Math.pow(10, (winner.elo - loser.elo) / 400));
+        const newWinnerElo = Math.round(winner.elo + K * (1 - expectedWinner));
+        const newLoserElo = Math.round(loser.elo + K * (0 - expectedLoser));
+        await this.playerService.updateElo(winner.id, newWinnerElo);
+        await this.playerService.updateElo(loser.id, newLoserElo);
+        const match = this.matchRepository.create({
+            winner,
+            loser,
+            timestamp: new Date(),
+        });
+        await this.matchRepository.save(match);
+        await this.rankingService.refreshRanking();
+        this.eventEmitter.emit('ranking.update', {
+            ranking: this.rankingService.getRanking(),
+        });
+        return match;
     }
     findAll() {
-        return `This action returns all match`;
+        return this.matchRepository.find({
+            relations: ['winner', 'loser'],
+            order: { id: 'DESC' },
+        });
     }
     findOne(id) {
-        return `This action returns a #${id} match`;
+        return this.matchRepository.findOne({
+            where: { id },
+            relations: ['winner', 'loser'],
+        });
     }
 };
 exports.MatchService = MatchService;
 exports.MatchService = MatchService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [player_service_1.PlayerService])
+    __param(0, (0, typeorm_1.InjectRepository)(match_entity_1.Match)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        player_service_1.PlayerService,
+        ranking_service_1.RankingService,
+        event_emitter_1.EventEmitter2])
 ], MatchService);
 //# sourceMappingURL=match.service.js.map

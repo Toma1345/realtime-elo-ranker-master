@@ -5,36 +5,42 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlayerService = void 0;
 const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+const player_entity_1 = require("./entities/player.entity");
 let PlayerService = class PlayerService {
-    players = [];
+    playerRepository;
+    constructor(playerRepository) {
+        this.playerRepository = playerRepository;
+    }
     create(createPlayerDto) {
-        const newPlayer = {
-            id: this.players.length + 1,
-            name: createPlayerDto.name,
-            elo: createPlayerDto.elo ?? 1000,
-        };
-        this.players.push(newPlayer);
-        return newPlayer;
+        const player = this.playerRepository.create(createPlayerDto);
+        return this.playerRepository.save(player);
     }
     findAll() {
-        return this.players;
+        return this.playerRepository.find({ order: { elo: 'DESC' } });
     }
     findOne(id) {
-        return this.players.find((p) => p.id === id);
+        return this.playerRepository.findOneBy({ id });
     }
-    updateElo(id, newElo) {
-        const player = this.findOne(id);
-        if (player) {
-            player.elo = newElo;
-        }
-        return player;
+    async updateElo(id, newElo) {
+        await this.playerRepository.update(id, { elo: newElo });
+        return this.findOne(id);
     }
 };
 exports.PlayerService = PlayerService;
 exports.PlayerService = PlayerService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(player_entity_1.Player)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], PlayerService);
 //# sourceMappingURL=player.service.js.map

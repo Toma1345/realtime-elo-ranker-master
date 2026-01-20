@@ -3,7 +3,7 @@ import { CreatePlayerDto } from './dto/create-player.dto';
 export declare class PlayerController {
     private readonly playerService;
     constructor(playerService: PlayerService);
-    create(createPlayerDto: CreatePlayerDto): import("./entities/player.entity").Player;
-    findAll(): import("./entities/player.entity").Player[];
-    findOne(id: string): import("./entities/player.entity").Player | undefined;
+    create(createPlayerDto: CreatePlayerDto): Promise<import("./entities/player.entity").Player>;
+    findAll(): Promise<import("./entities/player.entity").Player[]>;
+    findOne(id: string): Promise<import("./entities/player.entity").Player | null>;
 }

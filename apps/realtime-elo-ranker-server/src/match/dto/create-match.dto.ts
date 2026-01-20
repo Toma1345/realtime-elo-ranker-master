@@ -1,4 +1,12 @@
+import { IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+
 export class CreateMatchDto {
-  winnerId: string;
-  loserId: string;
+  @ApiProperty()
+  @IsNumber()
+  winnerId: number;
+
+  @ApiProperty()
+  @IsNumber()
+  loserId: number;
 }

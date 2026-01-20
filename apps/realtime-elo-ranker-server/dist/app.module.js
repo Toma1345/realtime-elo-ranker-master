@@ -8,19 +8,32 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const event_emitter_1 = require("@nestjs/event-emitter");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const player_module_1 = require("./player/player.module");
 const match_module_1 = require("./match/match.module");
-const ranking_gateway_1 = require("./ranking/ranking.gateway");
+const ranking_module_1 = require("./ranking/ranking.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [player_module_1.PlayerModule, match_module_1.MatchModule],
+        imports: [
+            event_emitter_1.EventEmitterModule.forRoot(),
+            typeorm_1.TypeOrmModule.forRoot({
+                type: 'sqlite',
+                database: 'elo.db',
+                entities: [__dirname + '/**/*.entity{.ts,.js}'],
+                synchronize: true,
+            }),
+            player_module_1.PlayerModule,
+            match_module_1.MatchModule,
+            ranking_module_1.RankingModule,
+        ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, ranking_gateway_1.RankingGateway],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

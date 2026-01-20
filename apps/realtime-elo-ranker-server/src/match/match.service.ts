@@ -1,55 +1,72 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PlayerService } from '../player/player.service';
+import { Match } from './entities/match.entity';
 import { CreateMatchDto } from './dto/create-match.dto';
+import { RankingService } from '../ranking/ranking.service';
 
 @Injectable()
 export class MatchService {
-  constructor(private readonly playerService: PlayerService) {}
+  constructor(
+    @InjectRepository(Match)
+    private matchRepository: Repository<Match>,
+    private playerService: PlayerService,
+    private rankingService: RankingService,
+    private eventEmitter: EventEmitter2,
+  ) {}
 
-  create(createMatchDto: CreateMatchDto) {
-    const winner = this.playerService.findOne(+createMatchDto.winnerId);
-    const loser = this.playerService.findOne(+createMatchDto.loserId);
+  async create(createMatchDto: CreateMatchDto) {
+    const { winnerId, loserId } = createMatchDto;
+
+    const winner = await this.playerService.findOne(winnerId);
+    const loser = await this.playerService.findOne(loserId);
 
     if (!winner || !loser) {
-      throw new Error('Player not found');
+      throw new NotFoundException('Joueur introuvable');
     }
 
     // Update ELO scores
-    const winnerElo = winner.elo;
-    const loserElo = loser.elo;
-    const kFactor = 32;
+    const K = 32;
 
-    const expectedWinnerScore = 1 / (1 + Math.pow(10, (loserElo - winnerElo) / 400));
-    const expectedLoserScore = 1 / (1 + Math.pow(10, (winnerElo - loserElo) / 400));
+    const expectedWinner = 1 / (1 + Math.pow(10, (loser.elo - winner.elo) / 400));
+    const expectedLoser = 1 / (1 + Math.pow(10, (winner.elo - loser.elo) / 400));
 
-    const newWinnerElo = winnerElo + kFactor * (1 - expectedWinnerScore);
-    const newLoserElo = loserElo + kFactor * (0 - expectedLoserScore);
+    const newWinnerElo = Math.round(winner.elo + K * (1 - expectedWinner));
+    const newLoserElo = Math.round(loser.elo + K * (0 - expectedLoser));
 
-    this.playerService.updateElo(+createMatchDto.winnerId, newWinnerElo);
-    this.playerService.updateElo(+createMatchDto.loserId, newLoserElo);
+    // Mise à jour des joueurs
+    await this.playerService.updateElo(winner.id, newWinnerElo);
+    await this.playerService.updateElo(loser.id, newLoserElo);
 
-    return {
-      message: 'Match validé',
-      details: {
-        winner: {
-          id: winner.id,
-          oldElo: winner.elo,
-          newElo: newWinnerElo,
-        },
-        loser: {
-          id: loser.id,
-          oldElo: loser.elo,
-          newElo: newLoserElo,
-        },
-      },
-    };
+    const match = this.matchRepository.create({
+      winner,
+      loser,
+      timestamp: new Date(),
+    });
+    await this.matchRepository.save(match);
+
+    await this.rankingService.refreshRanking();
+
+    this.eventEmitter.emit('ranking.update', {
+      ranking: this.rankingService.getRanking(),
+    });
+
+    return match;
   }
 
   findAll() {
-    return `This action returns all match`;
+    return this.matchRepository.find({
+      relations: ['winner', 'loser'],
+      order: { id: 'DESC' },
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} match`;
+    return this.matchRepository.findOne({
+      where: { id },
+      relations: ['winner', 'loser'],
+    });
   }
 }

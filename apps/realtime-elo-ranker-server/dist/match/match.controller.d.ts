@@ -3,21 +3,7 @@ import { CreateMatchDto } from './dto/create-match.dto';
 export declare class MatchController {
     private readonly matchService;
     constructor(matchService: MatchService);
-    create(createMatchDto: CreateMatchDto): {
-        message: string;
-        details: {
-            winner: {
-                id: number;
-                oldElo: number;
-                newElo: number;
-            };
-            loser: {
-                id: number;
-                oldElo: number;
-                newElo: number;
-            };
-        };
-    };
-    findAll(): string;
-    findOne(id: string): string;
+    create(createMatchDto: CreateMatchDto): Promise<import("./entities/match.entity").Match>;
+    findAll(): Promise<import("./entities/match.entity").Match[]>;
+    findOne(id: string): Promise<import("./entities/match.entity").Match | null>;
 }
