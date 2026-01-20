@@ -23,8 +23,9 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             event_emitter_1.EventEmitterModule.forRoot(),
             typeorm_1.TypeOrmModule.forRoot({
-                type: 'sqlite',
-                database: 'elo.db',
+                type: 'sqljs',
+                autoSave: true,
+                location: 'elo.db',
                 entities: [__dirname + '/**/*.entity{.ts,.js}'],
                 synchronize: true,
             }),

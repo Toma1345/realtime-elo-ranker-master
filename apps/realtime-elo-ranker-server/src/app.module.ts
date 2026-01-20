@@ -11,8 +11,9 @@ import { RankingModule } from './ranking/ranking.module';
   imports: [
     EventEmitterModule.forRoot(),
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'elo.db',
+      type: 'sqljs',
+      autoSave: true,
+      location: 'elo.db',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
