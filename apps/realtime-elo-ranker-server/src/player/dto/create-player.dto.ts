@@ -2,7 +2,10 @@ import { IsString, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePlayerDto {
-  @ApiProperty({ example: 'Tom', description: 'Nom du joueur' })
+  @ApiProperty({
+    example: 'Tom',
+    description: 'Nom du joueur (identifiant unique)',
+  })
   @IsString()
   @IsNotEmpty()
   id: string;

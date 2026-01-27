@@ -17,7 +17,10 @@ class CreatePlayerDto {
 }
 exports.CreatePlayerDto = CreatePlayerDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Tom', description: 'Nom du joueur' }),
+    (0, swagger_1.ApiProperty)({
+        example: 'Tom',
+        description: 'Nom du joueur (identifiant unique)',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)

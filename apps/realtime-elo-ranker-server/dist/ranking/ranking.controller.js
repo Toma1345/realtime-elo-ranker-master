@@ -58,7 +58,7 @@ __decorate([
     __metadata("design:returntype", rxjs_1.Observable)
 ], RankingController.prototype, "sse", null);
 exports.RankingController = RankingController = __decorate([
-    (0, swagger_1.ApiTags)('Ranking'),
+    (0, swagger_1.ApiTags)('ranking'),
     (0, common_1.Controller)('ranking'),
     __metadata("design:paramtypes", [ranking_service_1.RankingService,
         event_emitter_1.EventEmitter2])

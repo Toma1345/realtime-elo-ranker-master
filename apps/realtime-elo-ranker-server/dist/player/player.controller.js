@@ -16,6 +16,7 @@ exports.PlayerController = void 0;
 const common_1 = require("@nestjs/common");
 const player_service_1 = require("./player.service");
 const create_player_dto_1 = require("./dto/create-player.dto");
+const swagger_1 = require("@nestjs/swagger");
 let PlayerController = class PlayerController {
     playerService;
     constructor(playerService) {
@@ -34,6 +35,11 @@ let PlayerController = class PlayerController {
 exports.PlayerController = PlayerController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Créer un nouveau joueur' }),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'Le joueur a été créé avec succès.',
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_player_dto_1.CreatePlayerDto]),
@@ -41,18 +47,25 @@ __decorate([
 ], PlayerController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Récupérer tous les joueurs',
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], PlayerController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Récupérer un joueur selon son id',
+    }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PlayerController.prototype, "findOne", null);
 exports.PlayerController = PlayerController = __decorate([
+    (0, swagger_1.ApiTags)('players'),
     (0, common_1.Controller)('player'),
     __metadata("design:paramtypes", [player_service_1.PlayerService])
 ], PlayerController);

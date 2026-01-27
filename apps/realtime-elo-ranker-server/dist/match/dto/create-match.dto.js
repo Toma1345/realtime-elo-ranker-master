@@ -19,17 +19,26 @@ class CreateMatchDto {
 }
 exports.CreateMatchDto = CreateMatchDto;
 __decorate([
-    (0, swagger_1.ApiProperty)(),
+    (0, swagger_1.ApiProperty)({
+        example: 'Player1',
+        description: 'ID du vainqueur',
+    }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateMatchDto.prototype, "winner", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)(),
+    (0, swagger_1.ApiProperty)({
+        example: 'Player2',
+        description: 'ID du perdant',
+    }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateMatchDto.prototype, "loser", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)(),
+    (0, swagger_1.ApiProperty)({
+        example: false,
+        description: 'Le match est-il une égalité ?',
+    }),
     (0, class_validator_1.IsBoolean)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Boolean)

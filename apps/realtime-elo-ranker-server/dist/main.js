@@ -13,6 +13,9 @@ async function bootstrap() {
         .setTitle('Realtime ELO Ranker')
         .setDescription('API de classement ELO en temps réel')
         .setVersion('1.0')
+        .addTag('players', 'Gestion des joueurs')
+        .addTag('matches', 'Gestion des matchs')
+        .addTag('ranking', 'Classement et flux temps réel')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api', app, document);

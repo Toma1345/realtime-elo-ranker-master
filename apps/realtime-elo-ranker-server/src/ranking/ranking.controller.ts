@@ -4,7 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Observable, fromEvent, map } from 'rxjs';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
-@ApiTags('Ranking')
+@ApiTags('ranking')
 @Controller('ranking')
 export class RankingController {
   constructor(

@@ -2,6 +2,56 @@
 
 Realtime Elo Ranker est une application web permettant de simuler des matchs entre des joueurs et de calculer et afficher leur classement Elo en temps réel.
 
+---
+
+# *Partie complété (Thomas BROSSIER)*
+
+## 🚀 Lancer l'application complète
+Pour lancer l'ensemble du projet (Client + Serveur) depuis la racine du monorepo :
+1. Installer les dépendances :
+```bash
+  pnpm install
+```
+2. Lancer le serveur NestJS (Port 3333)
+```bash
+  pnpm run apps:server:dev
+```
+3. Lancer le client NextJS (Accessible sur `http://localhost:3000`)
+```bash
+  pnpm run apps:client:dev
+```
+
+## 🧪 Tests (Serveur)  
+Les commandes suivantes doivent être exécutées depuis le dossier ``apps/realtime-elo-ranker-server``.
+
+* **Tests unitaires**
+```bash
+  pnpm run test
+```
+* **Couverture de code**
+```bash
+  pnpm run test:cov
+```
+* **Tests e2e**
+```bash
+  pnpm run test:e2e
+```
+
+### Résultat de coverage
+![coverage](<rapport de coverage.png>)
+
+
+## Lancer la doc swagger
+La commande suivante doit être exécutée depuis la racine du monorepo.
+
+```bash
+pnpm run apps:server:dev
+```
+
+Le serveur Swagger sera accessible à l'adresse `http://localhost:3333/api/`.
+
+---
+
 ## Conteneurs Métiers
 
 `apps/realtime-elo-ranker-server` : Serveur de l'application (à implémenter)
@@ -54,7 +104,7 @@ pnpm run apps:client:dev
 ## Lancer la doc swagger
 
 ```bash
-pnpm run apps:swagger:start
+pnpm run docs:swagger:start
 ```
 
 Le serveur Swagger sera accessible à l'adresse `http://localhost:3001/api-docs`.

@@ -16,6 +16,7 @@ exports.MatchController = void 0;
 const common_1 = require("@nestjs/common");
 const match_service_1 = require("./match.service");
 const create_match_dto_1 = require("./dto/create-match.dto");
+const swagger_1 = require("@nestjs/swagger");
 let MatchController = class MatchController {
     matchService;
     constructor(matchService) {
@@ -34,6 +35,11 @@ let MatchController = class MatchController {
 exports.MatchController = MatchController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Créer un nouveau match' }),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'Le match a été créé avec succès.',
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_match_dto_1.CreateMatchDto]),
@@ -41,18 +47,25 @@ __decorate([
 ], MatchController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Récupérer tous les matchs',
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], MatchController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Récupérer un match selon un id',
+    }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], MatchController.prototype, "findOne", null);
 exports.MatchController = MatchController = __decorate([
+    (0, swagger_1.ApiTags)('matches'),
     (0, common_1.Controller)('match'),
     __metadata("design:paramtypes", [match_service_1.MatchService])
 ], MatchController);
