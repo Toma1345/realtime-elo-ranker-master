@@ -13,18 +13,25 @@ exports.CreateMatchDto = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
 class CreateMatchDto {
-    winnerId;
-    loserId;
+    winner;
+    loser;
+    draw;
 }
 exports.CreateMatchDto = CreateMatchDto;
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateMatchDto.prototype, "winnerId", void 0);
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateMatchDto.prototype, "winner", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateMatchDto.prototype, "loserId", void 0);
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateMatchDto.prototype, "loser", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsBoolean)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], CreateMatchDto.prototype, "draw", void 0);
 //# sourceMappingURL=create-match.dto.js.map

@@ -13,7 +13,7 @@ exports.CreatePlayerDto = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
 class CreatePlayerDto {
-    name;
+    id;
 }
 exports.CreatePlayerDto = CreatePlayerDto;
 __decorate([
@@ -21,5 +21,5 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreatePlayerDto.prototype, "name", void 0);
+], CreatePlayerDto.prototype, "id", void 0);
 //# sourceMappingURL=create-player.dto.js.map

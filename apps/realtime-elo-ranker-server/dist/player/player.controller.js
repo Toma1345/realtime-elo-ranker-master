@@ -28,7 +28,7 @@ let PlayerController = class PlayerController {
         return this.playerService.findAll();
     }
     findOne(id) {
-        return this.playerService.findOne(+id);
+        return this.playerService.findOne(id);
     }
 };
 exports.PlayerController = PlayerController;

@@ -18,13 +18,13 @@ export class MatchService {
   ) {}
 
   async create(createMatchDto: CreateMatchDto) {
-    const { winnerId, loserId } = createMatchDto;
+    const { winner: winnerName, loser: loserName, draw } = createMatchDto;
 
-    const winner = await this.playerService.findOne(winnerId);
-    const loser = await this.playerService.findOne(loserId);
+    const winner = await this.playerService.findOne(winnerName);
+    const loser = await this.playerService.findOne(loserName);
 
     if (!winner || !loser) {
-      throw new NotFoundException('Joueur introuvable');
+      throw new NotFoundException(`Joueur introuvable`);
     }
 
     // Update ELO scores
@@ -33,10 +33,16 @@ export class MatchService {
     const expectedWinner = 1 / (1 + Math.pow(10, (loser.elo - winner.elo) / 400));
     const expectedLoser = 1 / (1 + Math.pow(10, (winner.elo - loser.elo) / 400));
 
-    const newWinnerElo = Math.round(winner.elo + K * (1 - expectedWinner));
-    const newLoserElo = Math.round(loser.elo + K * (0 - expectedLoser));
+    const actualScoreWinner = draw ? 0.5 : 1;
+    const actualScoreLoser = draw ? 0.5 : 0;
 
-    // Mise à jour des joueurs
+    const newWinnerElo = Math.round(
+      winner.elo + K * (actualScoreWinner - expectedWinner),
+    );
+    const newLoserElo = Math.round(
+      loser.elo + K * (actualScoreLoser - expectedLoser),
+    );
+
     await this.playerService.updateElo(winner.id, newWinnerElo);
     await this.playerService.updateElo(loser.id, newLoserElo);
 
@@ -49,8 +55,13 @@ export class MatchService {
 
     await this.rankingService.refreshRanking();
 
-    this.eventEmitter.emit('ranking.update', {
-      ranking: this.rankingService.getRanking(),
+    this.eventEmitter.emit('ranking.notify', {
+      id: winner.id,
+      rank: newWinnerElo,
+    });
+    this.eventEmitter.emit('ranking.notify', {
+      id: loser.id,
+      rank: newLoserElo,
     });
 
     return match;

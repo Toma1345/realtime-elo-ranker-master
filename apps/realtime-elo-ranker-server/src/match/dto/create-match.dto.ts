@@ -1,12 +1,17 @@
-import { IsNumber } from 'class-validator';
+import { IsString, IsBoolean, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateMatchDto {
   @ApiProperty()
-  @IsNumber()
-  winnerId: number;
+  @IsString()
+  winner: string;
 
   @ApiProperty()
-  @IsNumber()
-  loserId: number;
+  @IsString()
+  loser: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  draw: boolean;
 }

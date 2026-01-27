@@ -13,20 +13,15 @@ exports.Player = void 0;
 const typeorm_1 = require("typeorm");
 let Player = class Player {
     id;
-    name;
     elo;
 };
 exports.Player = Player;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
+    (0, typeorm_1.PrimaryColumn)(),
+    __metadata("design:type", String)
 ], Player.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Player.prototype, "name", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ default: 1200 }),
+    (0, typeorm_1.Column)({ default: 1000 }),
     __metadata("design:type", Number)
 ], Player.prototype, "elo", void 0);
 exports.Player = Player = __decorate([

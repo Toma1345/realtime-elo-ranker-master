@@ -1,4 +1,5 @@
 export declare class CreateMatchDto {
-    winnerId: number;
-    loserId: number;
+    winner: string;
+    loser: string;
+    draw: boolean;
 }

@@ -23,11 +23,19 @@ let RankingController = class RankingController {
         this.eventEmitter = eventEmitter;
     }
     getRanking() {
-        return this.rankingService.getRanking();
+        return this.rankingService.getRanking().map((p) => ({
+            id: p.id,
+            rank: p.elo,
+        }));
     }
     sse() {
-        return (0, rxjs_1.fromEvent)(this.eventEmitter, 'ranking.update').pipe((0, rxjs_1.map)((data) => {
-            return { data };
+        return (0, rxjs_1.fromEvent)(this.eventEmitter, 'ranking.notify').pipe((0, rxjs_1.map)((player) => {
+            return {
+                data: {
+                    type: 'RankingUpdate',
+                    player: { id: player.id, rank: player.rank },
+                },
+            };
         }));
     }
 };
@@ -40,7 +48,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], RankingController.prototype, "getRanking", null);
 __decorate([
-    (0, common_1.Sse)('sse'),
+    (0, common_1.Sse)('events'),
     (0, swagger_1.ApiOperation)({ summary: 'Flux SSE pour les mises à jour du classement' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

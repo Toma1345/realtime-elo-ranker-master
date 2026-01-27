@@ -1,11 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Player {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @Column()
-  name: string;
-  @Column({ default: 1200 })
+  @PrimaryColumn()
+  id: string;
+  @Column({ default: 1000 })
   elo: number;
 }

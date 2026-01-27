@@ -6,6 +6,9 @@ export declare class RankingController {
     private readonly rankingService;
     private readonly eventEmitter;
     constructor(rankingService: RankingService, eventEmitter: EventEmitter2);
-    getRanking(): import("../player/entities/player.entity").Player[];
+    getRanking(): {
+        id: string;
+        rank: number;
+    }[];
     sse(): Observable<MessageEvent>;
 }

@@ -5,5 +5,5 @@ export class CreatePlayerDto {
   @ApiProperty({ example: 'Tom', description: 'Nom du joueur' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  id: string;
 }
