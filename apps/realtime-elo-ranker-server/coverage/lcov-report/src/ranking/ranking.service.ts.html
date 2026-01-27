@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.44% </span>
+                <span class="strong">94.44% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/18</span>
+                <span class='fraction'>17/18</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">93.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/15</span>
+                <span class='fraction'>14/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -106,30 +106,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -142,30 +142,30 @@ import { Player } from '../player/entities/player.entity';
 &nbsp;
 @Injectable()
 export class RankingService implements OnModuleInit {
-  private ranking: Player[] = <span class="cstat-no" title="statement not covered" >[];</span>
+  private ranking: Player[] = [];
 &nbsp;
-<span class="fstat-no" title="function not covered" >  constructor(</span>
-    private readonly <span class="cstat-no" title="statement not covered" >playerService: P</span>layerService<span class="branch-1 cbranch-no" title="branch not covered" >,</span>
-    private readonly <span class="cstat-no" title="statement not covered" >eventEmitter: E</span>ventEmitter2<span class="branch-1 cbranch-no" title="branch not covered" >,</span>
+  constructor(
+    private readonly playerService: PlayerService<span class="branch-1 cbranch-no" title="branch not covered" >,</span>
+    private readonly eventEmitter: EventEmitter2<span class="branch-1 cbranch-no" title="branch not covered" >,</span>
   ) {}
 &nbsp;
 <span class="fstat-no" title="function not covered" >  async </span>onModuleInit() {
 <span class="cstat-no" title="statement not covered" >    await this.refreshRanking();</span>
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  async </span>refreshRanking() {
-<span class="cstat-no" title="statement not covered" >    this.ranking = await this.playerService.findAll();</span>
-<span class="cstat-no" title="statement not covered" >    this.ranking.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.elo - a.elo)</span>;</span>
+  async refreshRanking() {
+    this.ranking = await this.playerService.findAll();
+    this.ranking.sort((a, b) =&gt; b.elo - a.elo);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  getRanking(</span>) {
-<span class="cstat-no" title="statement not covered" >    return this.ranking;</span>
+  getRanking() {
+    return this.ranking;
   }
 &nbsp;
   @OnEvent('player.created')
-  async <span class="fstat-no" title="function not covered" >handlePlayerCreated(</span>player: Player<span class="branch-1 cbranch-no" title="branch not covered" >) {</span>
-<span class="cstat-no" title="statement not covered" >    await this.refreshRanking();</span>
-<span class="cstat-no" title="statement not covered" >    this.eventEmitter.emit('ranking.notify', {</span>
+  async handlePlayerCreated(player: Player<span class="branch-1 cbranch-no" title="branch not covered" >) {</span>
+    await this.refreshRanking();
+    this.eventEmitter.emit('ranking.notify', {
       id: player.id,
       rank: player.elo,
     });
@@ -178,7 +178,7 @@ export class RankingService implements OnModuleInit {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-27T12:46:28.576Z
+                at 2026-01-27T15:53:57.398Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

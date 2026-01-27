@@ -32,12 +32,32 @@ describe('PlayerService', () => {
   });
 
   it('devrait créer un joueur et émettre un événement', async () => {
-    const dto = { id: 'Playher1' };
+    const dto = { id: 'Player1' };
     const result = await service.create(dto);
 
     expect(repo.create).toHaveBeenCalledWith(dto);
     expect(repo.save).toHaveBeenCalled();
     expect(eventEmitter.emit).toHaveBeenCalledWith('player.created', result);
     expect(result.id).toBe('Player1');
+  });
+
+  it('devrait renvoyer tous les joueurs', async () => {
+    jest.spyOn(repo, 'find').mockResolvedValue([]);
+    expect(await service.findAll()).toEqual([]);
+  });
+
+  it('devrait trouver un joueur', async () => {
+    const player = { id: 'p1' };
+    jest.spyOn(repo, 'findOneBy').mockResolvedValue(player as any);
+    expect(await service.findOne('p1')).toEqual(player);
+  });
+
+  it('devrait mettre à jour elo', async () => {
+    const updateSpy = jest.spyOn(repo, 'update').mockResolvedValue({} as any);
+    jest.spyOn(repo, 'findOneBy').mockResolvedValue({ id: 'p1', elo: 1100 } as any);
+
+    const result = await service.updateElo('p1', 1100);
+    expect(updateSpy).toHaveBeenCalledWith('p1', { elo: 1100 });
+    expect(result.elo).toBe(1100);
   });
 });

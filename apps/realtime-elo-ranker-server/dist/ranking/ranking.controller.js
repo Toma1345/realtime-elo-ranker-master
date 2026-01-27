@@ -33,7 +33,10 @@ let RankingController = class RankingController {
             return {
                 data: {
                     type: 'RankingUpdate',
-                    player: { id: player.id, rank: player.rank },
+                    player: {
+                        id: player.id,
+                        rank: player.rank
+                    },
                 },
             };
         }));
