@@ -1,11 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
-import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
+import request = require('supertest');
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication<App>;
+describe('Player Management (e2e)', () => {
+  let app: INestApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -16,10 +15,18 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/player (POST) - Création de joueur', () => {
     return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+      .post('/player')
+      .send({ id: 'NewPlayer' })
+      .expect(201)
+      .then((response) => {
+        expect(response.body.id).toBe('NewPlayer');
+        expect(response.body.elo).toBeDefined();
+      });
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });

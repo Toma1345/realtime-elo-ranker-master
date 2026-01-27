@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MatchService } from './match.service';
 import { MatchController } from './match.controller';
-import { PlayerModule } from 'src/player/player.module';
+import { PlayerModule } from '../player/player.module';
 import { RankingModule } from '../ranking/ranking.module';
 import { Match } from './entities/match.entity';
 
