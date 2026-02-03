@@ -126,18 +126,13 @@ export default function Home() {
               Déclarer un match
             </h2>
             <MatchForm
-              callback={async (
+              callback={(
                 adversaryA: string,
                 adversaryB: string,
                 result: MatchResult
-              ) => {
-                const response = await postMatchResult(API_BASE_URL, adversaryA, adversaryB, result);
-                
-                if (!response.ok) {
-                  const errorData = await response.json().catch(() => ({ message: "Erreur inconnue" }));
-                  alert(`Erreur : ${errorData.message}`);
-                }
-              }}
+              ) =>
+                postMatchResult(API_BASE_URL, adversaryA, adversaryB, result)
+              }
             />
           </div>
           <div className="flex flex-col gap-4">
