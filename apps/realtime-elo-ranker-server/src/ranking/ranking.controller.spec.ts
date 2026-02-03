@@ -16,7 +16,7 @@ describe('RankingController', () => {
           provide: PlayerService,
           useValue: { findAll: jest.fn().mockResolvedValue([]) },
         },
-        { provide: EventEmitter2, useValue: { emit: jest.fn() } },
+        EventEmitter2,
       ],
     }).compile();
 
